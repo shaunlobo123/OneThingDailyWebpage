@@ -350,12 +350,14 @@
             button.querySelector('span').innerText = 'Sending...';
 
             try {
+              const formData = new FormData();
+              formData.append('email', email);
+
               // no-cors: response unreadable but the request reaches Apps Script
               await fetch(SHEET_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'email=' + encodeURIComponent(email)
+                body: formData
               });
             } catch (_) {
               // network errors still show success — Apps Script received the data
