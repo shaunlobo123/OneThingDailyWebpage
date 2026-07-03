@@ -36,7 +36,7 @@
             <span class="badge-dot"></span>
             <span>Now Open for Early Access</span>
           </div>
-          <h1 class="hero-title gradient-text">One Wholesome Action.<br>One Beautiful Grove.</h1>
+          <h1 class="hero-title gradient-text">One Thing every day.<br>One beautiful grove.</h1>
           <p class="hero-description">
             One Thing Daily is a private space where you and your close friends share proof of doing one wholesome task a day. Together, watch your daily habits grow into a gorgeous, hand-drawn canopy.
           </p>
@@ -337,19 +337,16 @@
       setupForm('hero-signup-form', 'hero-form-feedback');
       setupForm('cta-signup-form', 'cta-form-feedback');
 
-      // --- Smooth Scrolling for Navigation Links ---
+      // --- Smooth Scrolling for Navigation ---
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
           e.preventDefault();
           const targetId = this.getAttribute('href');
-          if (targetId === '#') return;
           const targetElement = document.querySelector(targetId);
           if (targetElement) {
-            const headerHeight = document.querySelector('.header').offsetHeight || 80;
-            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth'
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
             });
           }
         });
