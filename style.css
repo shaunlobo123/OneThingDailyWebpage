@@ -929,27 +929,44 @@ html, body {
 
 @media (max-width: 768px) {
 
-  /* ── Fix overflow ── */
-  * {
-    max-width: 100%;
+  /* ── Fix horizontal page shifting ── */
+  html, body {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
   }
 
-  /* ── Header ── */
+  /* ── Header: clean logo + compact button ── */
   .header {
     position: fixed;
+    padding: 0.75rem 1.25rem;
   }
+  
   .nav-links {
-    display: none;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
-  /* ── Hero: full viewport, flex column ── */
+  .nav-link {
+    display: none; /* Hide text links */
+  }
+
+  .btn-nav {
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 8px rgba(207, 110, 20, 0.15);
+  }
+
+  /* ── Hero Section ── */
   .hero {
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 5rem 1.5rem 2rem;
+    padding: 5.5rem 1.25rem 2rem;
     position: relative;
+    box-sizing: border-box;
   }
 
   .hero-grid {
@@ -962,31 +979,78 @@ html, body {
     justify-content: center;
   }
 
-  /* Hide phone images in hero on mobile — content only */
   .hero-media {
-    display: none;
+    display: none; /* Keep hero image hidden on mobile for clean minimalist start */
   }
 
-  .badge, .hero-description, .signup-form-container, .hero-social-proof {
-    margin-left: auto;
-    margin-right: auto;
+  .hero-title {
+    font-size: 2.25rem;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
   }
 
-  /* ── Scroll arrow ── */
+  .hero-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+  }
+
+  /* ── Stacking signup form for all mobile/tablet viewports ── */
+  .signup-form-container {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto 2rem;
+  }
+
+  .signup-form {
+    flex-direction: column;
+    border-radius: 16px;
+    padding: 0.6rem;
+    gap: 0.6rem;
+    border: 1.5px solid var(--color-border);
+    background: var(--color-card-bg);
+  }
+
+  .signup-input {
+    padding: 0.8rem 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+    padding: 0.9rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    white-space: normal;
+  }
+
+  .hero-social-proof {
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  /* ── Scroll arrow: Outline style ── */
   .hero-scroll-arrow {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: var(--color-primary);
-    color: #fff;
+    background: transparent;
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text-secondary);
     margin: 1.5rem auto 0;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(207,110,20,0.25);
     animation: bounce 1.8s ease-in-out infinite;
     flex-shrink: 0;
+    transition: var(--transition-smooth);
   }
 
   @keyframes bounce {
@@ -994,9 +1058,9 @@ html, body {
     50%       { transform: translateY(6px); }
   }
 
-  /* ── Steps section ── */
+  /* ── Steps section: Premium Card Carousel ── */
   #how-it-works {
-    padding: 3rem 0 2rem;
+    padding: 4rem 0 3rem;
   }
 
   #how-it-works .section-container {
@@ -1008,42 +1072,62 @@ html, body {
   #how-it-works .section-header {
     text-align: center;
     padding: 0 1.5rem 2rem;
+    margin-bottom: 2rem;
   }
 
-  /* ── Horizontal carousel ── */
+  .section-title {
+    font-size: 2rem;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
   .grid-showcase {
     display: flex;
     flex-direction: row;
-    overflow-x: scroll;
+    overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;        /* Firefox */
-    -ms-overflow-style: none;     /* IE/Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     gap: 0;
+    padding: 0.5rem 0;
   }
 
   .grid-showcase::-webkit-scrollbar {
     display: none;
   }
 
-  /* Each step = one full-width card */
+  /* Slide cards: center aligned, with peek-a-boo gaps */
   .showcase-row,
   .showcase-row.reverse {
-    min-width: 100vw;
-    width: 100vw;
+    width: calc(100vw - 3.5rem);
+    min-width: calc(100vw - 3.5rem);
+    margin: 0 0.5rem;
     flex-shrink: 0;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
     grid-template-columns: 1fr;
     flex-direction: column;
     display: flex;
     align-items: center;
     gap: 1.5rem;
     text-align: center;
-    padding: 0 1.5rem 1rem;
+    padding: 2rem 1.25rem;
     box-sizing: border-box;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    box-shadow: var(--shadow-sm);
   }
 
-  /* Phone image on top, text below */
+  /* Add spacing for first and last slides so they snap nicely */
+  .showcase-row:first-child {
+    margin-left: 1.25rem;
+  }
+
+  .showcase-row:last-child {
+    margin-right: 1.25rem;
+  }
+
   .showcase-col-image {
     order: 1;
     width: 100%;
@@ -1051,24 +1135,52 @@ html, body {
     justify-content: center;
   }
 
-  .showcase-col-text {
-    order: 2;
-    width: 100%;
-  }
-
-  /* Constrain phone frame on mobile — same ratio, smaller size */
   .showcase-col-image .phone-frame {
-    width: 48vw;
-    max-width: 210px;
+    width: 42vw;
+    max-width: 170px;
     aspect-ratio: 390 / 844;
   }
 
-  .step-num, .showcase-accent-box {
-    margin-left: auto;
-    margin-right: auto;
+  .showcase-col-text {
+    order: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
-  /* ── Carousel dots ── */
+  .showcase-heading {
+    font-size: 1.6rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .showcase-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .step-num {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .showcase-accent-box {
+    margin: 0.5rem auto 0;
+    font-size: 0.9rem;
+    padding: 0.85rem 1rem;
+    width: 100%;
+    max-width: 290px;
+    border-radius: 8px;
+    text-align: center;
+    border-left: none;
+    border-top: 3px solid var(--color-primary);
+  }
+
   .steps-dots {
     display: flex;
     justify-content: center;
@@ -1092,20 +1204,39 @@ html, body {
     transform: scale(1.3);
   }
 
-  /* ── Rest of the page: normal scroll ── */
+  /* ── Rest of the page ── */
   .section {
-    padding: 4rem 1.5rem;
+    padding: 3.5rem 1.25rem;
   }
 
   .preview-bullets-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.75rem;
     margin-bottom: 2.5rem;
   }
 
+  .showcase-bullet {
+    text-align: left;
+    gap: 1rem;
+  }
+
+  .bullet-number {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .bullet-content h4 {
+    font-size: 1.1rem;
+  }
+
   .cta-inline {
-    padding: 2rem 1.25rem;
-    border-radius: 16px;
+    padding: 2.25rem 1.25rem;
+    border-radius: 20px;
+  }
+
+  .cta-inline .section-title {
+    font-size: 1.95rem;
   }
 
   .grid-features {
@@ -1113,36 +1244,13 @@ html, body {
     gap: 1.5rem;
   }
 
-  .cta-inline .signup-form-container {
-    max-width: 100%;
-  }
-
-  .cta-inline .signup-form {
-    flex-direction: column;
-    border-radius: 16px;
-    padding: 0.5rem;
-  }
-
-  .cta-inline .signup-input {
-    padding: 0.75rem 1rem;
-    text-align: center;
-  }
-
-  .cta-inline .btn-primary {
-    width: 100%;
-    justify-content: center;
-    padding: 0.9rem;
-    white-space: normal;
-    font-size: 0.9rem;
-  }
-
   .cta-wrapper {
-    padding: 4rem 1.5rem;
+    padding: 3.5rem 1.25rem;
   }
 
   .footer-top {
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
   }
 
   .footer-nav {
@@ -1153,29 +1261,8 @@ html, body {
 }
 
 @media (max-width: 480px) {
-  .hero-title {
-    font-size: 2.1rem;
-  }
-
-  .signup-form {
-    flex-direction: column;
-    border-radius: 16px;
-    padding: 0.5rem;
-  }
-
-  .signup-input {
-    padding: 0.75rem 1rem;
-    text-align: center;
-  }
-
-  .btn-primary {
-    width: 100%;
-    justify-content: center;
-    padding: 0.85rem;
-  }
-
   .footer-nav {
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 }

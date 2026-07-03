@@ -532,16 +532,30 @@
             dot.className = 'steps-dot' + (i === 0 ? ' active' : '');
             dot.setAttribute('aria-label', 'Go to step ' + (i + 1));
             dot.addEventListener('click', () => {
-              carousel.scrollTo({ left: carousel.offsetWidth * i, behavior: 'smooth' });
+              slides[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             });
             dotsContainer.appendChild(dot);
           });
 
-          // Update active dot on scroll
+          // Update active dot on scroll by finding the slide closest to the center
           carousel.addEventListener('scroll', () => {
-            const index = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+            const carouselRect = carousel.getBoundingClientRect();
+            const carouselMid = carouselRect.left + carouselRect.width / 2;
+            let activeIdx = 0;
+            let minDistance = Infinity;
+
+            slides.forEach((slide, idx) => {
+              const slideRect = slide.getBoundingClientRect();
+              const slideMid = slideRect.left + slideRect.width / 2;
+              const dist = Math.abs(carouselMid - slideMid);
+              if (dist < minDistance) {
+                minDistance = dist;
+                activeIdx = idx;
+              }
+            });
+
             dotsContainer.querySelectorAll('.steps-dot').forEach((dot, i) => {
-              dot.classList.toggle('active', i === index);
+              dot.classList.toggle('active', i === activeIdx);
             });
           }, { passive: true });
         }
