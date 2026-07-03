@@ -502,7 +502,7 @@ h1, h2, h3, h4 {
 }
 
 .showcase-row.reverse .showcase-col-image {
-  order: 2;
+  order: -1;
 }
 .showcase-row.reverse .showcase-col-text {
   order: 1;
