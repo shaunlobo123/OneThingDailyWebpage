@@ -398,8 +398,7 @@
         const rows = Array.from(document.querySelectorAll('.showcase-row'));
         return [
           document.querySelector('.hero'),
-          document.querySelector('#how-it-works'), // section header + Step 1 together
-          ...rows.slice(1),                        // Steps 2, 3, 4, 5
+          ...rows,                                 // Step 1, 2, 3, 4, 5 individually
           document.querySelector('#preview'),
           document.querySelector('#join')
         ].filter(Boolean);
@@ -443,10 +442,14 @@
         const elTop = el.getBoundingClientRect().top + window.pageYOffset;
         let targetScrollTop;
 
-        if (el.id === 'how-it-works') {
-          // Top-align so both the section header AND Step 1 are visible below the navbar
+        // Check if the current element is the FIRST showcase row (Step 1)
+        const firstRow = document.querySelector('.showcase-row');
+        if (el === firstRow) {
+          // Top-align to the parent container (#how-it-works) so both section header and Step 1 are in view
+          const parentSection = document.querySelector('#how-it-works');
+          const parentTop = parentSection.getBoundingClientRect().top + window.pageYOffset;
           const headerH = document.querySelector('.header').offsetHeight;
-          targetScrollTop = Math.max(0, elTop - headerH + 20);
+          targetScrollTop = Math.max(0, parentTop - headerH + 20);
         } else {
           // Center all other targets in the viewport
           const elCenter = elTop + el.offsetHeight / 2;
