@@ -388,7 +388,6 @@
       // Apple-style snap scroll — intercept wheel & touch
       // =====================================================
       function buildSnapTargets() {
-        // hero + each showcase-row (individual steps) + preview + join
         return [
           document.querySelector('.hero'),
           ...Array.from(document.querySelectorAll('.showcase-row')),
@@ -399,7 +398,31 @@
 
       let snapIndex = 0;
       let snapping = false;
-      const SNAP_DURATION = 750; // ms to lock after a snap
+
+      // Custom smooth scroll using requestAnimationFrame (easeInOutCubic)
+      function smoothScrollTo(targetY, duration) {
+        const startY = window.pageYOffset;
+        const distance = targetY - startY;
+        let startTime = null;
+
+        function easeInOutCubic(t) {
+          return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        function step(timestamp) {
+          if (!startTime) startTime = timestamp;
+          const elapsed = timestamp - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            snapping = false;
+          }
+        }
+
+        requestAnimationFrame(step);
+      }
 
       function snapToIndex(idx) {
         const targets = buildSnapTargets();
@@ -410,10 +433,9 @@
         const el = targets[idx];
         const elTop = el.getBoundingClientRect().top + window.pageYOffset;
         const elCenter = elTop + el.offsetHeight / 2;
-        const targetScrollTop = elCenter - window.innerHeight / 2;
+        const targetScrollTop = Math.max(0, elCenter - window.innerHeight / 2);
 
-        window.scrollTo({ top: Math.max(0, targetScrollTop), behavior: 'smooth' });
-        setTimeout(() => { snapping = false; }, SNAP_DURATION);
+        smoothScrollTo(targetScrollTop, 700);
       }
 
       function nearestSnapIndex() {
@@ -428,7 +450,7 @@
         return best;
       }
 
-      // Wheel
+      // Wheel — intercept and snap
       window.addEventListener('wheel', (e) => {
         e.preventDefault();
         if (snapping) return;
@@ -436,7 +458,7 @@
         snapToIndex(snapIndex + (e.deltaY > 0 ? 1 : -1));
       }, { passive: false });
 
-      // Touch
+      // Touch swipe support
       let touchStartY = 0;
       window.addEventListener('touchstart', (e) => {
         touchStartY = e.touches[0].clientY;
