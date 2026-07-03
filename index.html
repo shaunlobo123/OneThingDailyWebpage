@@ -367,19 +367,11 @@
       setupForm('hero-signup-form', 'hero-form-feedback');
       setupForm('cta-signup-form', 'cta-form-feedback');
 
-      // --- Smooth Scrolling for Navigation (header-offset aware) ---
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href');
-          if (!targetId || targetId === '#') return;
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            const headerHeight = document.querySelector('.header').offsetHeight;
-            const targetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
-            window.scrollTo({ top: targetTop, behavior: 'smooth' });
-          }
-        });
+      // --- Smooth Scrolling for Navigation ---
+      // CSS scroll-behavior: smooth + scroll-margin-top handle this natively.
+      // We only need to prevent default on logo click (#).
+      document.querySelectorAll('a[href="#"]').forEach(anchor => {
+        anchor.addEventListener('click', e => e.preventDefault());
       });
     });
   </script>
