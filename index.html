@@ -31,6 +31,9 @@
     </div>
   </header>
 
+  <!-- Floating Join Early Button (Appears on Scroll) -->
+  <a href="#join" class="btn-floating-join" id="floating-join-btn">Join Early</a>
+
   <main>
     <!-- Hero Section -->
     <section class="hero">
@@ -502,6 +505,18 @@
           if (Math.abs(dy) < 40) return;
           snapIndex = nearestSnapIndex();
           snapToIndex(snapIndex + (dy > 0 ? 1 : -1));
+        }, { passive: true });
+      }
+
+      // ── Scroll listener to toggle floating button ──
+      const floatingJoinBtn = document.getElementById('floating-join-btn');
+      if (floatingJoinBtn) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 150) {
+            floatingJoinBtn.classList.add('visible');
+          } else {
+            floatingJoinBtn.classList.remove('visible');
+          }
         }, { passive: true });
       }
 
