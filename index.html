@@ -395,9 +395,11 @@
       // Apple-style snap scroll — intercept wheel & touch
       // =====================================================
       function buildSnapTargets() {
+        const rows = Array.from(document.querySelectorAll('.showcase-row'));
         return [
           document.querySelector('.hero'),
-          ...Array.from(document.querySelectorAll('.showcase-row')),
+          document.querySelector('#how-it-works'), // section header + Step 1 together
+          ...rows.slice(1),                        // Steps 2, 3, 4, 5
           document.querySelector('#preview'),
           document.querySelector('#join')
         ].filter(Boolean);
@@ -439,8 +441,17 @@
 
         const el = targets[idx];
         const elTop = el.getBoundingClientRect().top + window.pageYOffset;
-        const elCenter = elTop + el.offsetHeight / 2;
-        const targetScrollTop = Math.max(0, elCenter - window.innerHeight / 2);
+        let targetScrollTop;
+
+        if (el.id === 'how-it-works') {
+          // Top-align so both the section header AND Step 1 are visible below the navbar
+          const headerH = document.querySelector('.header').offsetHeight;
+          targetScrollTop = Math.max(0, elTop - headerH - 8);
+        } else {
+          // Center all other targets in the viewport
+          const elCenter = elTop + el.offsetHeight / 2;
+          targetScrollTop = Math.max(0, elCenter - window.innerHeight / 2);
+        }
 
         smoothScrollTo(targetScrollTop, 700);
       }
